@@ -1,0 +1,98 @@
+Multer is a Node.js middleware for Express used to handle file uploads.
+
+When a frontend sends a file (like profile photo) using FormData, the request type becomes:
+
+multipart/form-data
+
+Express cannot read this type of data by default, so we use multer to process it.
+
+Why Multer is Needed
+
+You are uploading:
+
+Profile Photo
+
+from your signup form.
+
+Your frontend probably sends:
+
+const formData = new FormData();
+formData.append("fullName", input.fullName);
+formData.append("email", input.email);
+formData.append("phoneNumber", input.phoneNumber);
+formData.append("password", input.password);
+formData.append("role", input.role);
+formData.append("profilePhoto", file);
+
+This becomes:
+
+multipart/form-data
+
+Without multer:
+
+req.body = {}
+req.file = undefined
+
+So backend cannot read data.
+
+What Multer Does
+
+Multer extracts data from the request and gives you:
+
+Property	Contains
+req.body	text fields
+req.file	uploaded file
+
+Example request:
+
+fullName = Raghav
+email = raghav@gmail.com
+profilePhoto = image.jpg
+
+After multer:
+
+req.body = {
+  fullName: "Raghav",
+  email: "raghav@gmail.com"
+}
+
+req.file = {
+  filename: "image.jpg",
+  mimetype: "image/jpeg"
+}
+How to Install
+npm install multer
+Basic Example
+1️⃣ Import multer
+import multer from "multer";
+2️⃣ Configure storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+3️⃣ Use in route
+router.post("/register", upload.single("profilePhoto"), register);
+
+profilePhoto must match the name of file field in frontend.
+
+4️⃣ Access data in controller
+export const register = (req, res) => {
+
+  console.log(req.body); // text fields
+  console.log(req.file); // uploaded image
+
+};
+Flow Diagram
+React Form
+     ↓
+FormData
+     ↓
+multipart/form-data request
+     ↓
+Express
+     ↓
+Multer processes request
+     ↓
+req.body + req.file available
+Important Rule
+Data Type	Middleware Needed
+JSON	express.json()
+FormData (files)	multe

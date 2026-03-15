@@ -1,0 +1,11 @@
+Job Portal
+
+
+user
+
+FullName
+email
+phone number
+password
+role
+profile - bio,skills,photo,resume
