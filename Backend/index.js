@@ -37,10 +37,10 @@ app.use("/api/v1/application",ApplicationRouter)
 
 const __dirname = path.resolve()
 
-app.use(express.static(path.join(__dirname,"Frontend/vite-project/dist")))
+app.use(express.static(path.join(__dirname,"../Frontend/vite-project/dist")))
 
-app.use((req,res)=>{
-  res.sendFile(path.join(__dirname,"Frontend/vite-project/dist/index.html"))
+app.get("/*",(req,res)=>{
+   res.sendFile(path.join(__dirname,"../Frontend/vite-project/dist/index.html"))
 })
 
 
