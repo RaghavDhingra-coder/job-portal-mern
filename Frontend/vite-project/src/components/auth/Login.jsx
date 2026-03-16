@@ -61,7 +61,7 @@ const Login = () => {
         {
             navigate("/")
         }
-    },)
+    },[user])
 
     return (
         <>

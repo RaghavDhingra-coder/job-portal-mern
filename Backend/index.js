@@ -1,46 +1,46 @@
-import express from "express"
-import cookieParser from "cookie-parser"
-import cors from "cors"
-import connectDB from "./utils/db.js"
-import path from "path"
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import connectDB from "./utils/db.js";
+import path from "path";
 
-import userRouter from "./routes/user.route.js"
-import CompanyRouter from "./routes/company.route.js"
-import JobRouter from "./routes/job.route.js"
-import ApplicationRouter from "./routes/application.route.js"
+import userRouter from "./routes/user.route.js";
+import CompanyRouter from "./routes/company.route.js";
+import JobRouter from "./routes/job.route.js";
+import ApplicationRouter from "./routes/application.route.js";
 
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(cookieParser())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const corsOptions = {
-    origin:"https://job-portal-v3si.onrender.com",
-    credentials:true
-}
+    origin: true,
+    credentials: true
+};
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
-app.use("/api/v1/user",userRouter)
-app.use("/api/v1/company",CompanyRouter)
-app.use("/api/v1/job",JobRouter)
-app.use("/api/v1/application",ApplicationRouter)
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/company", CompanyRouter);
+app.use("/api/v1/job", JobRouter);
+app.use("/api/v1/application", ApplicationRouter);
 
-const __dirname = path.resolve()
+const __dirname = path.resolve();
 
-app.use(express.static(path.join(__dirname,"../Frontend/vite-project/dist")))
+app.use(express.static(path.join(__dirname, "../Frontend/vite-project/dist")));
 
-app.use((req,res)=>{
-   res.sendFile(path.join(__dirname,"../Frontend/vite-project/dist/index.html"))
-})
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "../Frontend/vite-project/dist/index.html"));
+});
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 
-app.listen(port,()=>{
-    connectDB()
-    console.log(`Listening at port : ${port}`)
-})
+app.listen(port, () => {
+    connectDB();
+    console.log(`Listening at port: ${port}`);
+});

@@ -84,7 +84,7 @@ const [err,setError] = useState("")
          {
              navigate("/")
          }
-     },)
+     },[user])
 
   return (
     <>
