@@ -10,7 +10,7 @@ const Signup = () => {
 // fullName, email, phoneNumber, password, role
 
 const dispatch = useDispatch()
-const {loading} = useSelector((store)=>store.auth)
+const {loading,user} = useSelector((store)=>store.auth)
 
 const [err,setError] = useState("")
 
