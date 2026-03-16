@@ -64,50 +64,47 @@ export const register = async (req, res) => {
 // this function is used to login a user
 export const login = async (req, res) => {
     try {
-        // i take email,password and role from the user
+
         const { email, password, role } = req.body;
 
-        // if user do not provide any of the detail i say something is missing
         if (!email || !password || !role) {
             return res.status(400).json({
-                message: "something is missing",
-                success: false,
+                message: "Something is missing",
+                success: false
             });
         }
 
-        // we will find the user with this email in our table
         let user = await User.findOne({ email });
 
-        // if user does not exists with the entered email we say incorrect email or password
         if (!user) {
             return res.status(400).json({
-                message: "Incorrect email or pssword",
-                success: false,
+                message: "Incorrect email or password",
+                success: false
             });
         }
 
-        // we will match password entered by the user and the password stored in the table associated with user
         const isPasswordMatch = await bcrypt.compare(password, user.password);
+
         if (!isPasswordMatch) {
             return res.status(400).json({
-                message: "inccorect email or password",
-                success: false,
+                message: "Incorrect email or password",
+                success: false
             });
         }
-        // we will match user entered role and role associated with the user in the table
+
         if (role !== user.role) {
             return res.status(400).json({
-                message: "Account doesn't exist with current role.",
-                success: false,
+                message: "Account doesn't exist with current role",
+                success: false
             });
         }
-        // we define token data
+
         const tokenData = {
-            userId: user._id,
+            userId: user._id
         };
-        // we genetate a token
-        const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {
-            expiresIn: "1d",
+
+        const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
+            expiresIn: "1d"
         });
 
         user = {
@@ -116,28 +113,27 @@ export const login = async (req, res) => {
             email: user.email,
             phoneNumber: user.phoneNumber,
             role: user.role,
-            profile: user.profile,
+            profile: user.profile
         };
-        // we send token in the cookie and the user details
+
         return res
             .status(200)
             .cookie("token", token, {
                 maxAge: 1 * 24 * 60 * 60 * 1000,
-                httpsOnly: true,
-                sameSite: "strict",
+                httpOnly: true,
+                secure: true,          // required for HTTPS (Render)
+                sameSite: "none"       // required for cross-origin cookies
             })
             .json({
                 message: `Welcome back ${user.fullName}`,
                 user,
-                success: true,
+                success: true
             });
 
+    } catch (err) {
+        console.log(err);
     }
-    catch (err) {
-        console.log(err)
-    }
-}
-
+};
 // this function will be used to logout
 export const logout = async (req, res) => {
     try {
